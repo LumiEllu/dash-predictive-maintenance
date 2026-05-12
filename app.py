@@ -1,0 +1,282 @@
+import dash
+from dash import dcc, html, Input, Output, State
+import plotly.graph_objs as go
+import plotly.io as pio
+
+from data.fake_api import fetch_data
+from data_processing import load_data
+
+import requests
+
+history = []
+
+def fetch_data():
+    r = requests.get("http://localhost:5000/data")
+    return r.json()
+
+df = load_data()
+
+app = dash.Dash(__name__)
+
+
+# LAYOUT PRINCIPALE : dark mode
+
+app.layout = html.Div([
+
+    # STATO SIDEBAR (open/closed)
+    # serve per ricordare se è aperta o chiusa
+    
+    dcc.Store(id="sidebar-state", data="open"),
+
+    
+    # SIDEBAR
+    html.Div(
+        id="sidebar",
+        children=[
+            html.Button("☰", id="toggle-btn"),  # bottone toggle
+
+            html.H3("Menu"),
+
+            # menu fittizio apri e chiudi
+            html.Ul([
+                html.Li("Lorem"),
+                html.Li("Lorem"),
+            ]),
+        ],
+
+        style={
+            "width": "250px",              # larghezza iniziale sidebar
+            "height": "100vh",
+            "backgroundColor": "#1f1f1f",
+            "color": "white",
+            "position": "fixed",
+            "left": "0",
+            "top": "0",
+            "padding": "20px",
+            "borderRadius": "10px",
+            "transition": "0.3s"          # animazione apertura/chiusura
+        }
+    ),
+
+    # CONTENUTO DASHBOARD (sfondo con grafici dentro ma in un div separato)
+    
+    html.Div(
+        id="dashboard-content",
+        children=[
+
+            html.H1("Prova Dashboard",
+                    style={"color": "white"}),
+
+            html.P("Analisi dati di manutenzione",
+                   style={"color": "#aaa"}),
+
+            # SLIDER interattivo per vedere i dati in scala
+            dcc.Slider(
+                id="time-slider",
+                min=0,
+                max=len(df) - 1,
+                value=len(df) // 2,
+                step=10
+            ),
+            
+            dcc.Interval(
+                id="interval-component",
+                interval=2000,  # aggiornamento ogni 2 secondi (troppo tempo)
+                n_intervals=0
+            ),
+
+            # GRIGLIA GRAFICI (contenitore)
+            html.Div([
+
+                html.Div([
+                    dcc.Graph(id="main-graph")
+                ], style={
+                    "backgroundColor": "#1c1c1c",
+                    "borderRadius": "16px",
+                    "overflow": "hidden",
+                    "boxShadow": "0px 4px 20px rgba(0,0,0,0.4)"
+                }),
+
+                html.Div([
+                    dcc.Graph(id="fault-graph")
+                ], style={
+                    "backgroundColor": "#1c1c1c",
+                    "borderRadius": "16px",
+                    "overflow": "hidden",
+                    "boxShadow": "0px 4px 20px rgba(0,0,0,0.4)"
+                }),
+
+                html.Div([
+                    dcc.Graph(id="rul-graph")
+                ], style={
+                    "backgroundColor": "#1c1c1c",
+                    "borderRadius": "16px",
+                    "overflow": "hidden",
+                    "boxShadow": "0px 4px 20px rgba(0,0,0,0.4)"
+                }),
+
+            ], style={
+                # GRID = dashboard moderna impostazione grid
+                "display": "grid",
+                "gridTemplateColumns": "repeat(2, 1fr)",  # 2 colonne
+                "gap": "15px",
+                "padding": "10px"
+            }),
+
+        ],
+
+        style={
+            "marginLeft": "260px",     # spazio per sidebar aperta
+            "backgroundColor": "#111111",
+            "minHeight": "100vh",
+            "padding": "20px",
+            "transition": "0.3s"       # animazione adattamento (da vedere perchè lorem non si riduce)
+        }
+    )
+
+])
+
+
+# CALLBACK GRAFICI risposta dei grafici cpn i dati
+
+@app.callback(
+    Output("main-graph", "figure"),
+    Output("fault-graph", "figure"),
+    Output("rul-graph", "figure"),
+    Input("interval-component", "n_intervals")  # ID per gli intervalli ogni due
+)
+def update_graph(n):
+
+    global history
+
+    data = fetch_data()  # prende nuovo dato
+
+    history.append(data)  # lo aggiunge allo storico
+
+    history = history[-50:]  # limita memoria
+
+
+    # FIGURA 1 - TEMPERATURA
+    fig1 = {
+        "data": [{
+            "x": list(range(len(history))),
+            "y": [d["temperature"] for d in history],
+            "mode": "lines"
+        }],
+        "layout": {
+            "title": "Temperatura in diretta",
+            "plot_bgcolor": "#1c1c1c",
+            "paper_bgcolor": "#1c1c1c",
+            "font": {"color": "white"}
+        }
+    }
+
+   
+    # FIGURA 2 - FAULT
+    fig2 = {
+        "data": [{
+            "x": list(range(len(history))),
+            "y": [d["fault"] for d in history],
+            "mode": "markers"
+        }],
+        "layout": {
+            "title": "Faults (live)",
+            "plot_bgcolor": "#1c1c1c",
+            "paper_bgcolor": "#1c1c1c",
+            "font": {"color": "white"}
+        }
+    }
+
+    # FIGURA 3 - RUL
+    
+    fig3 = {
+        "data": [{
+            "x": list(range(len(history))),
+            "y": [d["rul"] for d in history],
+            "mode": "lines"
+        }],
+        "layout": {
+            "title": "RUL (live)",
+            "plot_bgcolor": "#1c1c1c",
+            "paper_bgcolor": "#1c1c1c",
+            "font": {"color": "white"}
+        }
+    }
+
+    return fig1, fig2, fig3
+
+
+# TOGGLE SIDEBAR
+
+@app.callback(
+    Output("sidebar", "style"),
+    Output("dashboard-content", "style"),
+    Output("sidebar-state", "data"),
+    Input("toggle-btn", "n_clicks"),
+    State("sidebar-state", "data")
+)
+def toggle_sidebar(n, state):
+
+    if n is None:
+        return dash.no_update, dash.no_update, state
+
+    # SIDEBAR CHIUSA vedere come correggere 
+  
+    if state == "open":
+
+        sidebar_style = {
+            "width": "70px",  # ridotta
+            "height": "100vh",
+            "backgroundColor": "#1f1f1f",
+            "color": "white",
+            "position": "fixed",
+            "left": "0",
+            "top": "0",
+            "padding": "10px",
+            "borderRadius": "10px", # arrotondamento complesso
+            "transition": "0.3s"
+        }
+
+        content_style = {
+            "marginLeft": "90px",  # spazio ridotto
+            "backgroundColor": "#111111",
+            "minHeight": "100vh",
+            "padding": "20px",
+            "transition": "0.3s"
+        }
+
+        return sidebar_style, content_style, "closed"
+
+    
+    # SIDEBAR APERTA
+
+    else:
+
+        sidebar_style = {
+            "width": "250px",
+            "height": "100vh",
+            "backgroundColor": "#1f1f1f",
+            "color": "white",
+            "position": "fixed",
+            "left": "0",
+            "top": "0",
+            "padding": "20px",
+            "borderRadius": "10px", # altro arrotondamento
+            "transition": "0.3s"
+        }
+
+        content_style = {
+            "marginLeft": "260px",
+            "backgroundColor": "#111111",
+            "minHeight": "100vh",
+            "padding": "20px",
+            "transition": "0.3s"
+        }
+
+        return sidebar_style, content_style, "open"
+
+
+
+# RUN APP avvio della dashboard
+if __name__ == "__main__":
+    app.run(debug=True)

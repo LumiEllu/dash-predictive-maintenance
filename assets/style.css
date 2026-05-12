@@ -1,0 +1,35 @@
+body {
+    font-family: "Inter", sans-serif;
+}
+
+
+.sidebar {
+    position: fixed;
+    left: 0;
+    top: 0;
+    height: 100vh;
+    width: 220px;
+    background: #111;
+    transition: 0.3s;
+    overflow: hidden;
+}
+
+.sidebar.collapsed {
+    width: 70px;
+}
+
+.sidebar .menu div {
+    padding: 15px;
+    color: white;
+    cursor: pointer;
+}
+
+.content {
+    margin-left: 220px;
+    transition: 0.3s;
+}
+
+.sidebar.collapsed ~ .content {
+    margin-left: 70px;
+}
+
