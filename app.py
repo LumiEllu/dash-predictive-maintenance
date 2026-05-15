@@ -11,7 +11,7 @@ import requests
 history = []
 
 def fetch_data():
-    r = requests.get("http://localhost:5000/data")
+    r = requests.get("http://localhost:5000/data", timeout=1)
     return r.json()
 
 df = load_data()
@@ -22,6 +22,39 @@ app = dash.Dash(__name__)
 # LAYOUT PRINCIPALE : dark mode
 
 app.layout = html.Div([
+    
+    html.Div(
+    id="top-bar",
+    children=[
+        html.Div(
+            "LOGO",
+            style={
+                "width": "120px",
+                "height": "40px",
+                "backgroundColor": "#2a2a2a",
+                "borderRadius": "6px",
+                "display": "flex",
+                "alignItems": "center",
+                "justifyContent": "center",
+                "color": "#aaa",
+                "fontWeight": "bold"
+            }
+        )
+    ],
+    style={
+        "width": "100%",
+        "height": "50px",
+        "backgroundColor": "#0f0f0f",
+        "display": "flex",
+        "alignItems": "center",
+        "padding": "0 20px",
+        "position": "fixed",
+        "top": "0",
+        "left": "0",
+        "zIndex": "1000",
+        "boxShadow": "0px 2px 10px rgba(0,0,0,0.4)"
+    }
+),
 
     # STATO SIDEBAR (open/closed)
     # serve per ricordare se è aperta o chiusa
@@ -165,7 +198,7 @@ def update_graph(n):
         }],
         "layout": {
             "title": "Temperatura in diretta",
-            "plot_bgcolor": "#1c1c1c",
+            "plot_bgcolor": "#1c1c1C",
             "paper_bgcolor": "#1c1c1c",
             "font": {"color": "white"}
         }
@@ -199,6 +232,7 @@ def update_graph(n):
             "title": "RUL (live)",
             "plot_bgcolor": "#1c1c1c",
             "paper_bgcolor": "#1c1c1c",
+            "backgroundColor": "#1c1c1c",
             "font": {"color": "white"}
         }
     }
@@ -279,4 +313,4 @@ def toggle_sidebar(n, state):
 
 # RUN APP avvio della dashboard
 if __name__ == "__main__":
-    app.run(debug=True)
+    app.run(debug=True, port=8050)
