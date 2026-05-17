@@ -3,7 +3,6 @@ from dash import dcc, html, Input, Output, State
 import plotly.graph_objs as go
 import plotly.io as pio
 
-from data.fake_api import fetch_data
 from data_processing import load_data
 
 import requests
@@ -186,7 +185,7 @@ def update_graph(n):
 
     history.append(data)  # lo aggiunge allo storico
 
-    history = history[-50:]  # limita memoria
+    history[:] = history[-50:]  # limita memoria 
 
 
     # FIGURA 1 - TEMPERATURA
