@@ -1,3 +1,8 @@
+!!!! Quick Start : 
+```powershell
+.\start_dashboard.ps1
+```
+
 Questo progetto è una dashboard interattiva realizzata con Dash (Plotly) per la visualizzazione di dati simulati in tempo reale.
 
 Mostra metriche tipiche di manutenzione/monitoraggio come:
