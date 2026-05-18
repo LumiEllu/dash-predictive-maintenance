@@ -22,12 +22,12 @@ body {
 
 .sidebar .menu div {
     padding: 15px;
-    color: white;
+    color: #1c1c1c;
     cursor: pointer;
 }
 
 .content {
-    margin-left: 220px;
+    margin-left: 200px;
     transition: 0.3s;
 }
 

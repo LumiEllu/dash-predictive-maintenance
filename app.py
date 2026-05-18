@@ -76,7 +76,7 @@ app.layout = html.Div([
             ]),
         ],
         style={
-            "width": "250px",              # larghezza iniziale sidebar aperta
+            "width": "200px",              # larghezza iniziale sidebar aperta
             "height": "100vh",
             "backgroundColor": "#1f1f1f",
             "color": "white",
@@ -161,7 +161,7 @@ app.layout = html.Div([
         ],
 
         style={
-            "marginLeft": "260px",     # spazio per sidebar aperta
+            "marginLeft": "230px",     # spazio per sidebar aperta
             "backgroundColor": "#111111",
             "minHeight": "100vh",
             "padding": "20px",
@@ -271,13 +271,13 @@ def toggle_sidebar(n, state):
             "padding": "10px",
             "borderRadius": "10px", # arrotondamento complesso
             "transition": "0.3s",
-            "display": "flex",                  #aggiustamento scritta lorem con flex, column, center, quando la colonna è chiusta
+            "display": "flex",                  #aggiustamento scritta lorem con flex, column, center, quando la colonna è chiusa
             "flexDirection": "column",
             "alignItems": "center"
         }
 
         content_style = {
-            "marginLeft": "90px",  # spazio ridotto
+            "marginLeft": "70px",  # spazio ridotto
             "backgroundColor": "#111111",
             "minHeight": "100vh",
             "padding": "20px",
@@ -292,7 +292,7 @@ def toggle_sidebar(n, state):
     else:
 
         sidebar_style = {
-            "width": "250px",
+            "width": "200px",
             "height": "100vh",
             "backgroundColor": "#1f1f1f",
             "color": "white",
@@ -301,11 +301,11 @@ def toggle_sidebar(n, state):
             "top": "50px",
             "padding": "20px",
             "borderRadius": "10px", # altro arrotondamento
-            "transition": "0.3s"
+            "transition": "0.3s",
         }
 
         content_style = {
-            "marginLeft": "260px",
+            "marginLeft": "230px",
             "backgroundColor": "#111111",
             "minHeight": "100vh",
             "padding": "20px",
