@@ -151,7 +151,7 @@ app.layout = html.Div([
                 }),
 
             ], style={
-                # GRID = dashboard moderna impostazione grid
+                # GRID = dashboard impostazione grid
                 "display": "grid",
                 "gridTemplateColumns": "repeat(2, 1fr)",  # 2 colonne
                 "gap": "15px",
@@ -199,7 +199,12 @@ def update_graph(n):
             "mode": "lines"
         }],
         "layout": {
-            "title": "Temperatura in diretta",
+            "title": {
+                "text": "Temperatura in diretta",
+                "font": {
+                    "color": "white"
+                }
+            },
             "plot_bgcolor": "#1c1c1C",
             "paper_bgcolor": "#1c1c1c",
             "font": {"color": "white"}
@@ -215,7 +220,12 @@ def update_graph(n):
             "mode": "markers"
         }],
         "layout": {
-            "title": "Faults (live)",
+            "title": {
+                "text": "Faults (live)",
+                "font": {
+                    "color": "white"
+                }
+            },
             "plot_bgcolor": "#1c1c1c",
             "paper_bgcolor": "#1c1c1c",
             "font": {"color": "white"}
@@ -231,7 +241,12 @@ def update_graph(n):
             "mode": "lines"
         }],
         "layout": {
-            "title": "RUL (live)",
+            "title": {
+                "text": "RUL (live)",
+                "font": {
+                    "color": "white"
+                }
+            },
             "plot_bgcolor": "#1c1c1c",
             "paper_bgcolor": "#1c1c1c",
             "backgroundColor": "#1c1c1c",
