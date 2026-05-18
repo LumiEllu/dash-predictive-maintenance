@@ -77,13 +77,13 @@ app.layout = html.Div([
         ],
 
         style={
-            "width": "250px",              # larghezza iniziale sidebar
+            "width": "250px",              # larghezza iniziale sidebar aperta
             "height": "100vh",
             "backgroundColor": "#1f1f1f",
             "color": "white",
             "position": "fixed",
             "left": "0",
-            "top": "0",
+            "top": "50px",                  # spazio per top bar quando aperta
             "padding": "20px",
             "borderRadius": "10px",
             "transition": "0.3s"          # animazione apertura/chiusura
@@ -264,7 +264,7 @@ def toggle_sidebar(n, state):
             "color": "white",
             "position": "fixed",
             "left": "0",
-            "top": "0",
+            "top": "50px",
             "padding": "10px",
             "borderRadius": "10px", # arrotondamento complesso
             "transition": "0.3s"
@@ -292,7 +292,7 @@ def toggle_sidebar(n, state):
             "color": "white",
             "position": "fixed",
             "left": "0",
-            "top": "0",
+            "top": "50px",
             "padding": "20px",
             "borderRadius": "10px", # altro arrotondamento
             "transition": "0.3s"
