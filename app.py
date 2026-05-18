@@ -75,7 +75,6 @@ app.layout = html.Div([
                 html.Li("Lorem"),
             ]),
         ],
-
         style={
             "width": "250px",              # larghezza iniziale sidebar aperta
             "height": "100vh",
@@ -86,7 +85,7 @@ app.layout = html.Div([
             "top": "50px",                  # spazio per top bar quando aperta
             "padding": "20px",
             "borderRadius": "10px",
-            "transition": "0.3s"          # animazione apertura/chiusura
+            "transition": "0.3s",          # animazione apertura/chiusura
         }
     ),
 
@@ -97,10 +96,14 @@ app.layout = html.Div([
         children=[
 
             html.H1("Prova Dashboard",
-                    style={"color": "white"}),
+                    style={"color": "white",
+                           "paddingLeft": "10px",
+                           }),
 
             html.P("Analisi dati di manutenzione",
-                   style={"color": "#aaa"}),
+                   style={"color": "#aaa",
+                          "paddingLeft": "10px"
+                          }),
 
             # SLIDER interattivo per vedere i dati in scala
             dcc.Slider(
@@ -253,7 +256,7 @@ def toggle_sidebar(n, state):
     if n is None:
         return dash.no_update, dash.no_update, state
 
-    # SIDEBAR CHIUSA vedere come correggere 
+    # SIDEBAR CHIUSA con top 50px per vedere icona che chiude 
   
     if state == "open":
 
@@ -267,7 +270,10 @@ def toggle_sidebar(n, state):
             "top": "50px",
             "padding": "10px",
             "borderRadius": "10px", # arrotondamento complesso
-            "transition": "0.3s"
+            "transition": "0.3s",
+            "display": "flex",                  #aggiustamento scritta lorem con flex, column, center, quando la colonna è chiusta
+            "flexDirection": "column",
+            "alignItems": "center"
         }
 
         content_style = {
